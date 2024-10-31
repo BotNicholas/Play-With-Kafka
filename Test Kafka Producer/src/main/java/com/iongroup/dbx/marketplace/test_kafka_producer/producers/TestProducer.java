@@ -8,8 +8,10 @@ import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.common.header.Header;
+import org.apache.kafka.common.header.internals.RecordHeader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.RequestEntity.HeadersBuilder;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.support.SendResult;
 import org.springframework.messaging.Message;
@@ -33,19 +35,22 @@ public class TestProducer {
 //    SendResult<String, KafkaMessage> result = kafkaTemplate.send("test_topic", message).get();
 //    SendResult<String, String> result = kafkaTemplate.send("test_topic", objectMapper.writeValueAsString(message)).get();
 
+//    ProducerRecord<String, String> producerRecord = new ProducerRecord<String, String>(topic, null, System.currentTimeMillis(), null,
+//        objectMapper.writeValueAsString(message),
+//        List.of(new Header() {
+//          @Override
+//          public String key() {
+//            return "test-key";
+//          }
+//
+//          @Override
+//          public byte[] value() {
+//            return "test-value".getBytes();
+//          }
+//        }));
     ProducerRecord<String, String> producerRecord = new ProducerRecord<String, String>(topic, null, System.currentTimeMillis(), null,
         objectMapper.writeValueAsString(message),
-        List.of(new Header() {
-          @Override
-          public String key() {
-            return "test-key";
-          }
-
-          @Override
-          public byte[] value() {
-            return "test-value".getBytes();
-          }
-        }));
+        List.of(new RecordHeader("test-key", "test-value".getBytes())));
     SendResult<String, String> result1 = kafkaTemplate.send(producerRecord).get();
 
     System.out.println(result1);
