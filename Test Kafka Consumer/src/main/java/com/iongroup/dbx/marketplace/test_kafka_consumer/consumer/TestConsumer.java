@@ -20,6 +20,7 @@ public class TestConsumer {
 //    KafkaMessage kafkaMessage = objectMapper.readValue(message, KafkaMessage.class);
     KafkaMessage kafkaMessage = objectMapper.readValue(record.value(), KafkaMessage.class);
 
+    System.out.println("Record key: " + record.key());
     System.out.println("Received Message: " + kafkaMessage.getMessage());
     System.out.println("Headers: " + record.headers().toArray()[0].key() + "; " + new String(record.headers().toArray()[0].value()));
 

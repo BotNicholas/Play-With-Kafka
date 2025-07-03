@@ -48,7 +48,7 @@ public class TestProducer {
 //            return "test-value".getBytes();
 //          }
 //        }));
-    ProducerRecord<String, String> producerRecord = new ProducerRecord<String, String>(topic, null, System.currentTimeMillis(), null,
+    ProducerRecord<String, String> producerRecord = new ProducerRecord<String, String>(topic, null, System.currentTimeMillis(), "TEST_KEY",
         objectMapper.writeValueAsString(message),
         List.of(new RecordHeader("test-key", "test-value".getBytes())));
     SendResult<String, String> result1 = kafkaTemplate.send(producerRecord).get();
